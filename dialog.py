@@ -1,6 +1,9 @@
 import sys
 import os
 from datetime import datetime,date
+
+from tendo import singleton
+
 from PySide6.QtCore import (Qt,QTimer)
 from PySide6.QtWidgets import (QLineEdit,QComboBox, QPushButton, QApplication, 
     QVBoxLayout, QDialog, QLabel ,QMenu,QSystemTrayIcon)
@@ -12,11 +15,11 @@ DATA_DIR = 'data'
 SNOOZE_TIME_MINS = 15 #mins
 JOBS = ['One', 'Two', 'Three', 'Four']
 
-class Form(QDialog):
+class TimeForm(QDialog):
     
 
     def __init__(self, parent=None):
-        super(Form, self).__init__(parent)
+        super(TimeForm, self).__init__(parent)
 
         self.setWindowTitle("Timmy")
         #self.setMouseTracking(True)
@@ -98,21 +101,22 @@ class Form(QDialog):
         self.startSnoozeTimer()
 
 if __name__ == '__main__':
-    # Create the Qt Application
 
+    me = singleton.SingleInstance() # will sys.exit(-1) if other instance is running
     
-    DEBUG =True
+    DEBUG =False
     SNOOZE_TIME_MS = int((5/60 if DEBUG else SNOOZE_TIME_MINS)* 60 * 1000)
 
+    # Create the Qt Application
 
     app = QApplication(sys.argv)
     app.setQuitOnLastWindowClosed(False)
 
      # Create and show the form
-    form = Form()
+    form = TimeForm()
 
     # Adding an icon
-    icon = QIcon("icon.png")
+    icon = QIcon("timmy.png")
         
     # Adding item on the menu bar
     tray = QSystemTrayIcon()
